@@ -37,7 +37,7 @@ export class AssignmentPatternTransformerError extends Error {}
 
 export class AssignmentPatternTransformer extends ParseTreeTransformer {
 
-  transformBinaryOperator(tree) {
+  transformBinaryExpression(tree) {
     if (tree.operator.type !== EQUAL)
       throw new AssignmentPatternTransformerError();
 

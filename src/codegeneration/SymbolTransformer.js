@@ -42,7 +42,7 @@ import {parseExpression} from './PlaceholderParser';
  */
 export class SymbolTransformer extends TempVarTransformer {
 
-  transformBinaryOperator(tree) {
+  transformBinaryExpression(tree) {
     if (tree.operator.type === IN) {
       var name = this.transformAny(tree.left);
       var object = this.transformAny(tree.right);
@@ -69,7 +69,7 @@ export class SymbolTransformer extends TempVarTransformer {
           ${memberExpression}, ${value})`;
     }
 
-    return super.transformBinaryOperator(tree);
+    return super.transformBinaryExpression(tree);
   }
 
   transformMemberLookupExpression(tree) {

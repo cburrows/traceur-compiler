@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {
-  BINARY_OPERATOR,
+  BINARY_EXPRESSION,
   YIELD_EXPRESSION
 } from '../../syntax/trees/ParseTreeType';
 
@@ -22,7 +22,7 @@ import {
  * @return {boolean}
  */
 function isYieldAssign(tree) {
-  return tree.type === BINARY_OPERATOR &&
+  return tree.type === BINARY_EXPRESSION &&
       tree.operator.isAssignmentOperator() &&
       tree.right.type === YIELD_EXPRESSION &&
       tree.left.isLeftHandSideExpression();

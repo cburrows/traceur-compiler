@@ -24,7 +24,7 @@ import {parseStatement} from './PlaceholderParser';
 import {TempVarTransformer} from './TempVarTransformer';
 import {EQUAL} from '../syntax/TokenType';
 import {
-  BINARY_OPERATOR,
+  BINARY_EXPRESSION,
   COMMA_EXPRESSION,
   PAREN_EXPRESSION,
   YIELD_EXPRESSION
@@ -116,7 +116,7 @@ class YieldExpressionTransformer extends TempVarTransformer {
     var e = tree.expression, ex;
 
     // Inside EXPRESSION_STATEMENT, we should always be able to safely remove
-    // parens from BINARY_OPERATOR and COMMA_EXPRESSION. This will need to be
+    // parens from BINARY_EXPRESSION and COMMA_EXPRESSION. This will need to be
     // revisited if the switch afterwards ever supports more than that.
     while (e.type === PAREN_EXPRESSION) {
       e = e.expression;
@@ -131,7 +131,7 @@ class YieldExpressionTransformer extends TempVarTransformer {
     switch (e.type) {
       case COMMA_EXPRESSION:
         ex = e.expressions;
-        if (ex[0].type === BINARY_OPERATOR && isYieldAssign(ex[0]))
+        if (ex[0].type === BINARY_EXPRESSION && isYieldAssign(ex[0]))
           return this.factorAssign_(ex[0].left, ex[0].right, commaWrap);
     }
 

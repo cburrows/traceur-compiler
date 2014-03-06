@@ -42,7 +42,7 @@ import {
 } from '../syntax/TokenType';
 import {
   createAssignmentExpression,
-  createBinaryOperator,
+  createBinaryExpression,
   createCommaExpression,
   createIdentifierExpression,
   createMemberExpression,
@@ -55,7 +55,7 @@ import {
  * Returns the binary operator that the assignment operator should use. For
  * example *= should use *.
  */
-function getBinaryOperator(type) {
+function getBinaryExpression(type) {
   switch (type) {
     case STAR_EQUAL:
       return STAR;
@@ -113,9 +113,9 @@ export function expandMemberLookupExpression(tree, tempVarTransformer) {
     createAssignmentExpression(tmp2, tree.left.memberExpression),
     createAssignmentExpression(
         createMemberLookupExpression(tmp1, tmp2),
-        createBinaryOperator(
+        createBinaryExpression(
             createMemberLookupExpression(tmp1, tmp2),
-            createOperatorToken(getBinaryOperator(tree.operator.type)),
+            createOperatorToken(getBinaryExpression(tree.operator.type)),
             tree.right))
   );
   return createParenExpression(createCommaExpression(expressions));
@@ -149,9 +149,9 @@ export function expandMemberExpression(tree, tempVarTransformer) {
   expressions.push(
       createAssignmentExpression(
           createMemberExpression(tmp, tree.left.memberName),
-          createBinaryOperator(
+          createBinaryExpression(
               createMemberExpression(tmp, tree.left.memberName),
-              createOperatorToken(getBinaryOperator(tree.operator.type)),
+              createOperatorToken(getBinaryExpression(tree.operator.type)),
               tree.right)));
   return createParenExpression(createCommaExpression(expressions));
 }

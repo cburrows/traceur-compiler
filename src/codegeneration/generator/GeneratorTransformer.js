@@ -18,7 +18,7 @@ import {
   YIELD_EXPRESSION
 } from '../../syntax/trees/ParseTreeType';
 import {
-  BinaryOperator,
+  BinaryExpression,
   ExpressionStatement
 } from '../../syntax/trees/ParseTrees'
 import {FallThroughState} from './FallThroughState';
@@ -165,14 +165,14 @@ export class GeneratorTransformer extends CPSTransformer {
   }
 
   /**
-   * @param {BinaryOperator} tree
+   * @param {BinaryExpression} tree
    */
   transformYieldAssign_(tree) {
     var machine = this.transformYieldExpression_(tree.right);
     var left = this.transformAny(tree.left);
     var statement = new ExpressionStatement(
         tree.location,
-        new BinaryOperator(
+        new BinaryExpression(
             tree.location,
             left,
             tree.operator,

@@ -48,7 +48,7 @@ import {
   ArrayPattern,
   ArrowFunctionExpression,
   AwaitStatement,
-  BinaryOperator,
+  BinaryExpression,
   BindingElement,
   BindingIdentifier,
   Block,
@@ -386,18 +386,18 @@ export function createArrayPattern(list) {
 /**
  * @param {ParseTree} lhs
  * @param {ParseTree} rhs
- * @return {BinaryOperator}
+ * @return {BinaryExpression}
  */
 export function createAssignmentExpression(lhs, rhs) {
-  return new BinaryOperator(null, lhs,
+  return new BinaryExpression(null, lhs,
       createOperatorToken(EQUAL), rhs);
 }
 
 /**
- * @return {BinaryOperator}
+ * @return {BinaryExpression}
  */
-export function createBinaryOperator(left, operator, right) {
-  return new BinaryOperator(null, left, operator, right);
+export function createBinaryExpression(left, operator, right) {
+  return new BinaryExpression(null, left, operator, right);
 }
 
 /**

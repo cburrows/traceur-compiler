@@ -218,9 +218,9 @@ export class ParseTreeValidator extends ParseTreeVisitor {
   }
 
   /**
-   * @param {BinaryOperator} tree
+   * @param {BinaryExpression} tree
    */
-  visitBinaryOperator(tree) {
+  visitBinaryExpression(tree) {
     switch (tree.operator.type) {
       // assignment
       case EQUAL:
@@ -285,7 +285,7 @@ export class ParseTreeValidator extends ParseTreeVisitor {
         break;
 
       default:
-        this.fail_(tree, 'unexpected binary operator');
+        this.fail_(tree, 'unexpected binary expression');
     }
     this.visitAny(tree.left);
     this.visitAny(tree.right);

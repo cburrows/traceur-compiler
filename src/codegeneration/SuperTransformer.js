@@ -181,7 +181,7 @@ export class SuperTransformer extends ParseTreeTransformer {
     return super.transformMemberLookupExpression(tree);
   }
 
-  transformBinaryOperator(tree) {
+  transformBinaryExpression(tree) {
     if (tree.operator.isAssignmentOperator() &&
         (tree.left.type === MEMBER_EXPRESSION ||
          tree.left.type === MEMBER_LOOKUP_EXPRESSION) &&
@@ -210,7 +210,7 @@ export class SuperTransformer extends ParseTreeTransformer {
                                                        ${right})`;
     }
 
-    return super.transformBinaryOperator(tree);
+    return super.transformBinaryExpression(tree);
   }
 
   /**

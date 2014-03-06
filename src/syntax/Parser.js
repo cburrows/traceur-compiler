@@ -24,7 +24,7 @@ import {
 import {IdentifierToken} from './IdentifierToken';
 import {
   ARRAY_LITERAL_EXPRESSION,
-  BINARY_OPERATOR,
+  BINARY_EXPRESSION,
   CALL_EXPRESSION,
   CLASS_DECLARATION,
   COMMA_EXPRESSION,
@@ -181,7 +181,7 @@ import {
   ArrayPattern,
   ArrowFunctionExpression,
   AwaitStatement,
-  BinaryOperator,
+  BinaryExpression,
   BindingElement,
   BindingIdentifier,
   Block,
@@ -2371,7 +2371,7 @@ export class Parser {
       var operator = this.nextToken_();
       var right = this.parseAssignmentExpression(expressionIn);
 
-      return new BinaryOperator(this.getTreeLocation_(start), left, operator, right);
+      return new BinaryExpression(this.getTreeLocation_(start), left, operator, right);
     }
 
     left = this.toParenExpression_(left);
@@ -2449,10 +2449,10 @@ export class Parser {
     return condition;
   }
 
-  newBinaryOperator_(start, left, operator, right) {
+  newBinaryExpression_(start, left, operator, right) {
     left = this.toParenExpression_(left);
     right = this.toParenExpression_(right);
-    return new BinaryOperator(this.getTreeLocation_(start), left, operator, right);
+    return new BinaryExpression(this.getTreeLocation_(start), left, operator, right);
   }
 
   // 11.11 Logical OR
@@ -2467,7 +2467,7 @@ export class Parser {
     var operator;
     while (operator = this.eatOpt_(OR)) {
       var right = this.parseLogicalAND_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2484,7 +2484,7 @@ export class Parser {
     var operator;
     while (operator = this.eatOpt_(AND)) {
       var right = this.parseBitwiseOR_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2501,7 +2501,7 @@ export class Parser {
     var operator;
     while (operator = this.eatOpt_(BAR)) {
       var right = this.parseBitwiseXOR_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2518,7 +2518,7 @@ export class Parser {
     var operator;
     while (operator = this.eatOpt_(CARET)) {
       var right = this.parseBitwiseAND_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2535,7 +2535,7 @@ export class Parser {
     var operator;
     while (operator = this.eatOpt_(AMPERSAND)) {
       var right = this.parseEquality_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2552,7 +2552,7 @@ export class Parser {
     while (this.peekEqualityOperator_(this.peekType_())) {
       var operator = this.nextToken_();
       var right = this.parseRelational_(expressionIn);
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2584,7 +2584,7 @@ export class Parser {
     while (this.peekRelationalOperator_(expressionIn)) {
       var operator = this.nextToken_();
       var right = this.parseShiftExpression_();
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2620,7 +2620,7 @@ export class Parser {
     while (this.peekShiftOperator_(this.peekType_())) {
       var operator = this.nextToken_();
       var right = this.parseAdditiveExpression_();
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2651,7 +2651,7 @@ export class Parser {
     while (this.peekAdditiveOperator_(this.peekType_())) {
       var operator = this.nextToken_();
       var right = this.parseMultiplicativeExpression_();
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }
@@ -2681,7 +2681,7 @@ export class Parser {
     while (this.peekMultiplicativeOperator_(this.peekType_())) {
       var operator = this.nextToken_();
       var right = this.parseUnaryExpression_();
-      left = this.newBinaryOperator_(start, left, operator, right);
+      left = this.newBinaryExpression_(start, left, operator, right);
     }
     return left;
   }

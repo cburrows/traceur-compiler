@@ -68,7 +68,7 @@ class ToFormalParametersTransformer extends ParseTreeTransformer {
         null);
   }
 
-  transformBinaryOperator(tree) {
+  transformBinaryExpression(tree) {
     if (tree.operator.type !== EQUAL)
       throw new CoverFormalsTransformerError(tree.operator,
           `Unexpected token ${tree.operator}`);

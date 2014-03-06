@@ -54,7 +54,7 @@ import {
 import {
   createArgumentList,
   createAssignmentExpression,
-  createBinaryOperator,
+  createBinaryExpression,
   createBindingIdentifier,
   createBlock,
   createCallExpression,
@@ -158,7 +158,7 @@ function createConditionalMemberExpression(rvalue, name, initialiser) {
     return createMemberExpression(rvalue, token);
 
   return createConditionalExpression(
-      createBinaryOperator(
+      createBinaryExpression(
           createStringLiteral(token.toString()),
           createOperatorToken(IN),
           rvalue),
@@ -174,7 +174,7 @@ function createConditionalMemberLookupExpression(rvalue, index, initialiser) {
     return createMemberLookupExpression(rvalue, index);
 
   return createConditionalExpression(
-      createBinaryOperator(
+      createBinaryExpression(
           index,
           createOperatorToken(IN),
           rvalue),
@@ -217,14 +217,14 @@ export class DestructuringTransformer extends ParameterTransformer {
    *
    * Nested patterns are desugared by recursive calls to transform.
    *
-   * @param {BinaryOperator} tree
+   * @param {BinaryExpression} tree
    * @return {ParseTree}
    */
-  transformBinaryOperator(tree) {
+  transformBinaryExpression(tree) {
     if (tree.operator.type == EQUAL && tree.left.isPattern()) {
       return this.transformAny(this.desugarAssignment_(tree.left, tree.right));
     } else {
-      return super.transformBinaryOperator(tree);
+      return super.transformBinaryExpression(tree);
     }
   }
 

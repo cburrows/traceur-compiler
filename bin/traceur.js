@@ -2065,7 +2065,7 @@ System.register("traceur@0.0.25/src/syntax/ParseTreeVisitor", [], function() {
     visitAwaitStatement: function(tree) {
       this.visitAny(tree.expression);
     },
-    visitBinaryOperator: function(tree) {
+    visitBinaryExpression: function(tree) {
       this.visitAny(tree.left);
       this.visitAny(tree.right);
     },
@@ -2523,7 +2523,7 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTreeType", [], function() 
   var ARRAY_PATTERN = 'ARRAY_PATTERN';
   var ARROW_FUNCTION_EXPRESSION = 'ARROW_FUNCTION_EXPRESSION';
   var AWAIT_STATEMENT = 'AWAIT_STATEMENT';
-  var BINARY_OPERATOR = 'BINARY_OPERATOR';
+  var BINARY_EXPRESSION = 'BINARY_EXPRESSION';
   var BINDING_ELEMENT = 'BINDING_ELEMENT';
   var BINDING_IDENTIFIER = 'BINDING_IDENTIFIER';
   var BLOCK = 'BLOCK';
@@ -2636,8 +2636,8 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTreeType", [], function() 
     get AWAIT_STATEMENT() {
       return AWAIT_STATEMENT;
     },
-    get BINARY_OPERATOR() {
-      return BINARY_OPERATOR;
+    get BINARY_EXPRESSION() {
+      return BINARY_EXPRESSION;
     },
     get BINDING_ELEMENT() {
       return BINDING_ELEMENT;
@@ -2955,7 +2955,7 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTree", [], function() {
       ARRAY_PATTERN = $__18.ARRAY_PATTERN,
       ARROW_FUNCTION_EXPRESSION = $__18.ARROW_FUNCTION_EXPRESSION,
       AWAIT_STATEMENT = $__18.AWAIT_STATEMENT,
-      BINARY_OPERATOR = $__18.BINARY_OPERATOR,
+      BINARY_EXPRESSION = $__18.BINARY_EXPRESSION,
       BINDING_ELEMENT = $__18.BINDING_ELEMENT,
       BINDING_IDENTIFIER = $__18.BINDING_IDENTIFIER,
       BLOCK = $__18.BLOCK,
@@ -3087,7 +3087,7 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTree", [], function() {
         case ARRAY_COMPREHENSION:
         case ARRAY_LITERAL_EXPRESSION:
         case ARROW_FUNCTION_EXPRESSION:
-        case BINARY_OPERATOR:
+        case BINARY_EXPRESSION:
         case CALL_EXPRESSION:
         case CLASS_EXPRESSION:
         case CONDITIONAL_EXPRESSION:
@@ -3404,22 +3404,22 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTrees", [], function() {
       return AWAIT_STATEMENT;
     }
   }, {}, ParseTree);
-  var BINARY_OPERATOR = ParseTreeType.BINARY_OPERATOR;
-  var BinaryOperator = function BinaryOperator(location, left, operator, right) {
+  var BINARY_EXPRESSION = ParseTreeType.BINARY_EXPRESSION;
+  var BinaryExpression = function BinaryExpression(location, left, operator, right) {
     this.location = location;
     this.left = left;
     this.operator = operator;
     this.right = right;
   };
-  ($traceurRuntime.createClass)(BinaryOperator, {
+  ($traceurRuntime.createClass)(BinaryExpression, {
     transform: function(transformer) {
-      return transformer.transformBinaryOperator(this);
+      return transformer.transformBinaryExpression(this);
     },
     visit: function(visitor) {
-      visitor.visitBinaryOperator(this);
+      visitor.visitBinaryExpression(this);
     },
     get type() {
-      return BINARY_OPERATOR;
+      return BINARY_EXPRESSION;
     }
   }, {}, ParseTree);
   var BINDING_ELEMENT = ParseTreeType.BINDING_ELEMENT;
@@ -4898,8 +4898,8 @@ System.register("traceur@0.0.25/src/syntax/trees/ParseTrees", [], function() {
     get AwaitStatement() {
       return AwaitStatement;
     },
-    get BinaryOperator() {
-      return BinaryOperator;
+    get BinaryExpression() {
+      return BinaryExpression;
     },
     get BindingElement() {
       return BindingElement;
@@ -6678,7 +6678,7 @@ System.register("traceur@0.0.25/src/outputgeneration/ParseTreeWriter", [], funct
       this.visitAny(tree.expression);
       this.write_(SEMI_COLON);
     },
-    visitBinaryOperator: function(tree) {
+    visitBinaryExpression: function(tree) {
       var left = tree.left;
       this.visitAny(left);
       var operator = tree.operator;
@@ -8683,7 +8683,7 @@ System.register("traceur@0.0.25/src/syntax/ParseTreeValidator", [], function() {
     visitAwaitStatement: function(tree) {
       this.checkVisit_(tree.expression.isExpression(), tree.expression, 'await must be expression');
     },
-    visitBinaryOperator: function(tree) {
+    visitBinaryExpression: function(tree) {
       switch (tree.operator.type) {
         case EQUAL:
         case STAR_EQUAL:
@@ -8727,7 +8727,7 @@ System.register("traceur@0.0.25/src/syntax/ParseTreeValidator", [], function() {
           this.check_(tree.right.isArrowFunctionExpression(), tree.right, 'assignment expression expected');
           break;
         default:
-          this.fail_(tree, 'unexpected binary operator');
+          this.fail_(tree, 'unexpected binary expression');
       }
       this.visitAny(tree.left);
       this.visitAny(tree.right);
@@ -9182,7 +9182,7 @@ System.register("traceur@0.0.25/src/codegeneration/ParseTreeFactory", [], functi
       ArrayPattern = $__47.ArrayPattern,
       ArrowFunctionExpression = $__47.ArrowFunctionExpression,
       AwaitStatement = $__47.AwaitStatement,
-      BinaryOperator = $__47.BinaryOperator,
+      BinaryExpression = $__47.BinaryExpression,
       BindingElement = $__47.BindingElement,
       BindingIdentifier = $__47.BindingIdentifier,
       Block = $__47.Block,
@@ -9376,10 +9376,10 @@ System.register("traceur@0.0.25/src/codegeneration/ParseTreeFactory", [], functi
     return new ArrayPattern(null, list);
   }
   function createAssignmentExpression(lhs, rhs) {
-    return new BinaryOperator(null, lhs, createOperatorToken(EQUAL), rhs);
+    return new BinaryExpression(null, lhs, createOperatorToken(EQUAL), rhs);
   }
-  function createBinaryOperator(left, operator, right) {
-    return new BinaryOperator(null, left, operator, right);
+  function createBinaryExpression(left, operator, right) {
+    return new BinaryExpression(null, left, operator, right);
   }
   function createBindingIdentifier(identifier) {
     if (typeof identifier === 'string')
@@ -9756,8 +9756,8 @@ System.register("traceur@0.0.25/src/codegeneration/ParseTreeFactory", [], functi
     get createAssignmentExpression() {
       return createAssignmentExpression;
     },
-    get createBinaryOperator() {
-      return createBinaryOperator;
+    get createBinaryExpression() {
+      return createBinaryExpression;
     },
     get createBindingIdentifier() {
       return createBindingIdentifier;
@@ -9995,7 +9995,7 @@ System.register("traceur@0.0.25/src/codegeneration/ParseTreeTransformer", [], fu
       ArrayPattern = $__50.ArrayPattern,
       ArrowFunctionExpression = $__50.ArrowFunctionExpression,
       AwaitStatement = $__50.AwaitStatement,
-      BinaryOperator = $__50.BinaryOperator,
+      BinaryExpression = $__50.BinaryExpression,
       BindingElement = $__50.BindingElement,
       BindingIdentifier = $__50.BindingIdentifier,
       Block = $__50.Block,
@@ -10167,13 +10167,13 @@ System.register("traceur@0.0.25/src/codegeneration/ParseTreeTransformer", [], fu
       }
       return new AwaitStatement(tree.location, tree.identifier, expression);
     },
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       var left = this.transformAny(tree.left);
       var right = this.transformAny(tree.right);
       if (left === tree.left && right === tree.right) {
         return tree;
       }
-      return new BinaryOperator(tree.location, left, tree.operator, right);
+      return new BinaryExpression(tree.location, left, tree.operator, right);
     },
     transformBindingElement: function(tree) {
       var binding = this.transformAny(tree.binding);
@@ -10792,7 +10792,7 @@ System.register("traceur@0.0.25/src/codegeneration/AssignmentPatternTransformer"
   };
   var $AssignmentPatternTransformer = AssignmentPatternTransformer;
   ($traceurRuntime.createClass)(AssignmentPatternTransformer, {
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       if (tree.operator.type !== EQUAL)
         throw new AssignmentPatternTransformerError();
       var bindingElement = this.transformAny(tree.left);
@@ -10871,7 +10871,7 @@ System.register("traceur@0.0.25/src/codegeneration/CoverFormalsTransformer", [],
     transformIdentifierExpression: function(tree) {
       return new BindingElement(tree.location, new BindingIdentifier(tree.location, tree.identifierToken), null);
     },
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       if (tree.operator.type !== EQUAL)
         throw new CoverFormalsTransformerError(tree.operator, ("Unexpected token " + tree.operator));
       var bindingElement = this.transformAny(tree.left);
@@ -11067,7 +11067,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
   var IdentifierToken = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/IdentifierToken").IdentifierToken;
   var $__65 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/trees/ParseTreeType"),
       ARRAY_LITERAL_EXPRESSION = $__65.ARRAY_LITERAL_EXPRESSION,
-      BINARY_OPERATOR = $__65.BINARY_OPERATOR,
+      BINARY_EXPRESSION = $__65.BINARY_EXPRESSION,
       CALL_EXPRESSION = $__65.CALL_EXPRESSION,
       CLASS_DECLARATION = $__65.CLASS_DECLARATION,
       COMMA_EXPRESSION = $__65.COMMA_EXPRESSION,
@@ -11217,7 +11217,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       ArrayPattern = $__65.ArrayPattern,
       ArrowFunctionExpression = $__65.ArrowFunctionExpression,
       AwaitStatement = $__65.AwaitStatement,
-      BinaryOperator = $__65.BinaryOperator,
+      BinaryExpression = $__65.BinaryExpression,
       BindingElement = $__65.BindingElement,
       BindingIdentifier = $__65.BindingIdentifier,
       Block = $__65.Block,
@@ -12553,7 +12553,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
         }
         var operator = this.nextToken_();
         var right = this.parseAssignmentExpression(expressionIn);
-        return new BinaryOperator(this.getTreeLocation_(start), left, operator, right);
+        return new BinaryExpression(this.getTreeLocation_(start), left, operator, right);
       }
       left = this.toParenExpression_(left);
       if (!allowCoverGrammar)
@@ -12606,10 +12606,10 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       }
       return condition;
     },
-    newBinaryOperator_: function(start, left, operator, right) {
+    newBinaryExpression_: function(start, left, operator, right) {
       left = this.toParenExpression_(left);
       right = this.toParenExpression_(right);
-      return new BinaryOperator(this.getTreeLocation_(start), left, operator, right);
+      return new BinaryExpression(this.getTreeLocation_(start), left, operator, right);
     },
     parseLogicalOR_: function(expressionIn) {
       var start = this.getTreeStartLocation_();
@@ -12617,7 +12617,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       var operator;
       while (operator = this.eatOpt_(OR)) {
         var right = this.parseLogicalAND_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12627,7 +12627,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       var operator;
       while (operator = this.eatOpt_(AND)) {
         var right = this.parseBitwiseOR_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12637,7 +12637,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       var operator;
       while (operator = this.eatOpt_(BAR)) {
         var right = this.parseBitwiseXOR_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12647,7 +12647,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       var operator;
       while (operator = this.eatOpt_(CARET)) {
         var right = this.parseBitwiseAND_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12657,7 +12657,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       var operator;
       while (operator = this.eatOpt_(AMPERSAND)) {
         var right = this.parseEquality_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12667,7 +12667,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       while (this.peekEqualityOperator_(this.peekType_())) {
         var operator = this.nextToken_();
         var right = this.parseRelational_(expressionIn);
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12687,7 +12687,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       while (this.peekRelationalOperator_(expressionIn)) {
         var operator = this.nextToken_();
         var right = this.parseShiftExpression_();
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12711,7 +12711,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       while (this.peekShiftOperator_(this.peekType_())) {
         var operator = this.nextToken_();
         var right = this.parseAdditiveExpression_();
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12731,7 +12731,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       while (this.peekAdditiveOperator_(this.peekType_())) {
         var operator = this.nextToken_();
         var right = this.parseMultiplicativeExpression_();
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -12750,7 +12750,7 @@ System.register("traceur@0.0.25/src/syntax/Parser", [], function() {
       while (this.peekMultiplicativeOperator_(this.peekType_())) {
         var operator = this.nextToken_();
         var right = this.parseUnaryExpression_();
-        left = this.newBinaryOperator_(start, left, operator, right);
+        left = this.newBinaryExpression_(start, left, operator, right);
       }
       return left;
     },
@@ -15623,14 +15623,14 @@ System.register("traceur@0.0.25/src/codegeneration/OperatorExpander", [], functi
       UNSIGNED_RIGHT_SHIFT_EQUAL = $__150.UNSIGNED_RIGHT_SHIFT_EQUAL;
   var $__150 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/ParseTreeFactory"),
       createAssignmentExpression = $__150.createAssignmentExpression,
-      createBinaryOperator = $__150.createBinaryOperator,
+      createBinaryExpression = $__150.createBinaryExpression,
       createCommaExpression = $__150.createCommaExpression,
       createIdentifierExpression = $__150.createIdentifierExpression,
       createMemberExpression = $__150.createMemberExpression,
       createMemberLookupExpression = $__150.createMemberLookupExpression,
       createOperatorToken = $__150.createOperatorToken,
       createParenExpression = $__150.createParenExpression;
-  function getBinaryOperator(type) {
+  function getBinaryExpression(type) {
     switch (type) {
       case STAR_EQUAL:
         return STAR;
@@ -15668,7 +15668,7 @@ System.register("traceur@0.0.25/src/codegeneration/OperatorExpander", [], functi
       expressions.push(createAssignmentExpression(tmp1, tree.left.operand));
     }
     var tmp2 = createIdentifierExpression(tempVarTransformer.addTempVar());
-    expressions.push(createAssignmentExpression(tmp2, tree.left.memberExpression), createAssignmentExpression(createMemberLookupExpression(tmp1, tmp2), createBinaryOperator(createMemberLookupExpression(tmp1, tmp2), createOperatorToken(getBinaryOperator(tree.operator.type)), tree.right)));
+    expressions.push(createAssignmentExpression(tmp2, tree.left.memberExpression), createAssignmentExpression(createMemberLookupExpression(tmp1, tmp2), createBinaryExpression(createMemberLookupExpression(tmp1, tmp2), createOperatorToken(getBinaryExpression(tree.operator.type)), tree.right)));
     return createParenExpression(createCommaExpression(expressions));
   }
   function expandMemberExpression(tree, tempVarTransformer) {
@@ -15680,7 +15680,7 @@ System.register("traceur@0.0.25/src/codegeneration/OperatorExpander", [], functi
       tmp = createIdentifierExpression(tempVarTransformer.addTempVar());
       expressions.push(createAssignmentExpression(tmp, tree.left.operand));
     }
-    expressions.push(createAssignmentExpression(createMemberExpression(tmp, tree.left.memberName), createBinaryOperator(createMemberExpression(tmp, tree.left.memberName), createOperatorToken(getBinaryOperator(tree.operator.type)), tree.right)));
+    expressions.push(createAssignmentExpression(createMemberExpression(tmp, tree.left.memberName), createBinaryExpression(createMemberExpression(tmp, tree.left.memberName), createOperatorToken(getBinaryExpression(tree.operator.type)), tree.right)));
     return createParenExpression(createCommaExpression(expressions));
   }
   return {
@@ -15802,7 +15802,7 @@ System.register("traceur@0.0.25/src/codegeneration/SuperTransformer", [], functi
         return this.transformMemberShared_(tree, tree.memberExpression);
       return $traceurRuntime.superCall(this, $SuperTransformer.prototype, "transformMemberLookupExpression", [tree]);
     },
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       if (tree.operator.isAssignmentOperator() && (tree.left.type === MEMBER_EXPRESSION || tree.left.type === MEMBER_LOOKUP_EXPRESSION) && tree.left.operand.type === SUPER_EXPRESSION) {
         if (tree.operator.type !== EQUAL) {
           if (tree.left.type === MEMBER_LOOKUP_EXPRESSION) {
@@ -15818,7 +15818,7 @@ System.register("traceur@0.0.25/src/codegeneration/SuperTransformer", [], functi
         var right = this.transformAny(tree.right);
         return parseExpression($__153, thisExpr, this.protoName_, name, right);
       }
-      return $traceurRuntime.superCall(this, $SuperTransformer.prototype, "transformBinaryOperator", [tree]);
+      return $traceurRuntime.superCall(this, $SuperTransformer.prototype, "transformBinaryExpression", [tree]);
     },
     transformSuperExpression: function(tree) {
       this.reportError_(tree, '"super" may only be used on the LHS of a member ' + 'access expression before a call (TODO wording)');
@@ -16187,7 +16187,7 @@ System.register("traceur@0.0.25/src/codegeneration/DefaultParametersTransformer"
       NOT_EQUAL_EQUAL = $__174.NOT_EQUAL_EQUAL,
       VAR = $__174.VAR;
   var $__174 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/ParseTreeFactory"),
-      createBinaryOperator = $__174.createBinaryOperator,
+      createBinaryExpression = $__174.createBinaryExpression,
       createConditionalExpression = $__174.createConditionalExpression,
       createIdentifierExpression = $__174.createIdentifierExpression,
       createMemberLookupExpression = $__174.createMemberLookupExpression,
@@ -16202,7 +16202,7 @@ System.register("traceur@0.0.25/src/codegeneration/DefaultParametersTransformer"
     if (initialiser === null || isUndefined(initialiser) || isVoidExpression(initialiser)) {
       assignmentExpression = argumentsExpression;
     } else {
-      assignmentExpression = createConditionalExpression(createBinaryOperator(argumentsExpression, createOperatorToken(NOT_EQUAL_EQUAL), createVoid0()), argumentsExpression, initialiser);
+      assignmentExpression = createConditionalExpression(createBinaryExpression(argumentsExpression, createOperatorToken(NOT_EQUAL_EQUAL), createVoid0()), argumentsExpression, initialiser);
     }
     return createVariableStatement(VAR, binding, assignmentExpression);
   }
@@ -16275,7 +16275,7 @@ System.register("traceur@0.0.25/src/codegeneration/DestructuringTransformer", []
   var $__177 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/ParseTreeFactory"),
       createArgumentList = $__177.createArgumentList,
       createAssignmentExpression = $__177.createAssignmentExpression,
-      createBinaryOperator = $__177.createBinaryOperator,
+      createBinaryExpression = $__177.createBinaryExpression,
       createBindingIdentifier = $__177.createBindingIdentifier,
       createBlock = $__177.createBlock,
       createCallExpression = $__177.createCallExpression,
@@ -16335,12 +16335,12 @@ System.register("traceur@0.0.25/src/codegeneration/DestructuringTransformer", []
     }
     if (!initialiser)
       return createMemberExpression(rvalue, token);
-    return createConditionalExpression(createBinaryOperator(createStringLiteral(token.toString()), createOperatorToken(IN), rvalue), createMemberExpression(rvalue, token), initialiser);
+    return createConditionalExpression(createBinaryExpression(createStringLiteral(token.toString()), createOperatorToken(IN), rvalue), createMemberExpression(rvalue, token), initialiser);
   }
   function createConditionalMemberLookupExpression(rvalue, index, initialiser) {
     if (!initialiser)
       return createMemberLookupExpression(rvalue, index);
-    return createConditionalExpression(createBinaryOperator(index, createOperatorToken(IN), rvalue), createMemberLookupExpression(rvalue, index), initialiser);
+    return createConditionalExpression(createBinaryExpression(index, createOperatorToken(IN), rvalue), createMemberLookupExpression(rvalue, index), initialiser);
   }
   var DestructuringTransformer = function DestructuringTransformer() {
     $traceurRuntime.defaultSuperCall(this, $DestructuringTransformer.prototype, arguments);
@@ -16353,11 +16353,11 @@ System.register("traceur@0.0.25/src/codegeneration/DestructuringTransformer", []
     transformObjectPattern: function(tree) {
       throw new Error('unreachable');
     },
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       if (tree.operator.type == EQUAL && tree.left.isPattern()) {
         return this.transformAny(this.desugarAssignment_(tree.left, tree.right));
       } else {
-        return $traceurRuntime.superCall(this, $DestructuringTransformer.prototype, "transformBinaryOperator", [tree]);
+        return $traceurRuntime.superCall(this, $DestructuringTransformer.prototype, "transformBinaryExpression", [tree]);
       }
     },
     desugarAssignment_: function(lvalue, rvalue) {
@@ -17971,7 +17971,7 @@ System.register("traceur@0.0.25/src/codegeneration/generator/ForInTransformPass"
   var $__240 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/ParseTreeFactory"),
       createArgumentList = $__240.createArgumentList,
       createAssignmentStatement = $__240.createAssignmentStatement,
-      createBinaryOperator = $__240.createBinaryOperator,
+      createBinaryExpression = $__240.createBinaryExpression,
       createBlock = $__240.createBlock,
       createCallStatement = $__240.createCallStatement,
       createContinueStatement = $__240.createContinueStatement,
@@ -18026,9 +18026,9 @@ System.register("traceur@0.0.25/src/codegeneration/generator/ForInTransformPass"
       }
       var innerBlock = [];
       innerBlock.push(assignOriginalKey);
-      innerBlock.push(createIfStatement(createUnaryExpression(createOperatorToken(BANG), createParenExpression(createBinaryOperator(originalKey, createOperatorToken(IN), createIdentifierExpression(collection)))), createContinueStatement(), null));
+      innerBlock.push(createIfStatement(createUnaryExpression(createOperatorToken(BANG), createParenExpression(createBinaryExpression(originalKey, createOperatorToken(IN), createIdentifierExpression(collection)))), createContinueStatement(), null));
       ($__241 = innerBlock).push.apply($__241, $traceurRuntime.toObject(bodyStatements));
-      elements.push(createForStatement(createVariableDeclarationList(VAR, i, createNumberLiteral(0)), createBinaryOperator(createIdentifierExpression(i), createOperatorToken(OPEN_ANGLE), createMemberExpression(keys, LENGTH)), createPostfixExpression(createIdentifierExpression(i), createOperatorToken(PLUS_PLUS)), createBlock(innerBlock)));
+      elements.push(createForStatement(createVariableDeclarationList(VAR, i, createNumberLiteral(0)), createBinaryExpression(createIdentifierExpression(i), createOperatorToken(OPEN_ANGLE), createMemberExpression(keys, LENGTH)), createPostfixExpression(createIdentifierExpression(i), createOperatorToken(PLUS_PLUS)), createBlock(innerBlock)));
       return createBlock(elements);
     }}, {}, TempVarTransformer);
   return {get ForInTransformPass() {
@@ -18102,10 +18102,10 @@ System.register("traceur@0.0.25/src/codegeneration/generator/isYieldAssign", [],
   "use strict";
   var __moduleName = "traceur@0.0.25/src/codegeneration/generator/isYieldAssign";
   var $__249 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/trees/ParseTreeType"),
-      BINARY_OPERATOR = $__249.BINARY_OPERATOR,
+      BINARY_EXPRESSION = $__249.BINARY_EXPRESSION,
       YIELD_EXPRESSION = $__249.YIELD_EXPRESSION;
   function isYieldAssign(tree) {
-    return tree.type === BINARY_OPERATOR && tree.operator.isAssignmentOperator() && tree.right.type === YIELD_EXPRESSION && tree.left.isLeftHandSideExpression();
+    return tree.type === BINARY_EXPRESSION && tree.operator.isAssignmentOperator() && tree.right.type === YIELD_EXPRESSION && tree.left.isLeftHandSideExpression();
   }
   var $__default = isYieldAssign;
   return {get default() {
@@ -18126,7 +18126,7 @@ System.register("traceur@0.0.25/src/codegeneration/generator/GeneratorTransforme
       STATE_MACHINE = $__257.STATE_MACHINE,
       YIELD_EXPRESSION = $__257.YIELD_EXPRESSION;
   var $__257 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/trees/ParseTrees"),
-      BinaryOperator = $__257.BinaryOperator,
+      BinaryExpression = $__257.BinaryExpression,
       ExpressionStatement = $__257.ExpressionStatement;
   var FallThroughState = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/generator/FallThroughState").FallThroughState;
   var ReturnState = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/generator/ReturnState").ReturnState;
@@ -18187,7 +18187,7 @@ System.register("traceur@0.0.25/src/codegeneration/generator/GeneratorTransforme
     transformYieldAssign_: function(tree) {
       var machine = this.transformYieldExpression_(tree.right);
       var left = this.transformAny(tree.left);
-      var statement = new ExpressionStatement(tree.location, new BinaryOperator(tree.location, left, tree.operator, parseExpression($__251)));
+      var statement = new ExpressionStatement(tree.location, new BinaryExpression(tree.location, left, tree.operator, parseExpression($__251)));
       var assignMachine = this.statementToStateMachine_(statement);
       return machine.append(assignMachine);
     },
@@ -18254,7 +18254,7 @@ System.register("traceur@0.0.25/src/codegeneration/GeneratorTransformPass", [], 
   var TempVarTransformer = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/TempVarTransformer").TempVarTransformer;
   var EQUAL = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/TokenType").EQUAL;
   var $__259 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/trees/ParseTreeType"),
-      BINARY_OPERATOR = $__259.BINARY_OPERATOR,
+      BINARY_EXPRESSION = $__259.BINARY_EXPRESSION,
       COMMA_EXPRESSION = $__259.COMMA_EXPRESSION,
       PAREN_EXPRESSION = $__259.PAREN_EXPRESSION,
       YIELD_EXPRESSION = $__259.YIELD_EXPRESSION;
@@ -18324,7 +18324,7 @@ System.register("traceur@0.0.25/src/codegeneration/GeneratorTransformPass", [], 
       switch (e.type) {
         case COMMA_EXPRESSION:
           ex = e.expressions;
-          if (ex[0].type === BINARY_OPERATOR && isYieldAssign(ex[0]))
+          if (ex[0].type === BINARY_EXPRESSION && isYieldAssign(ex[0]))
             return this.factorAssign_(ex[0].left, ex[0].right, commaWrap);
       }
       return tree;
@@ -18995,7 +18995,7 @@ System.register("traceur@0.0.25/src/codegeneration/SymbolTransformer", [], funct
   };
   var $SymbolTransformer = SymbolTransformer;
   ($traceurRuntime.createClass)(SymbolTransformer, {
-    transformBinaryOperator: function(tree) {
+    transformBinaryExpression: function(tree) {
       if (tree.operator.type === IN) {
         var name = this.transformAny(tree.left);
         var object = this.transformAny(tree.right);
@@ -19011,7 +19011,7 @@ System.register("traceur@0.0.25/src/codegeneration/SymbolTransformer", [], funct
         var value = this.transformAny(tree.right);
         return parseExpression($__286, operand, memberExpression, value);
       }
-      return $traceurRuntime.superCall(this, $SymbolTransformer.prototype, "transformBinaryOperator", [tree]);
+      return $traceurRuntime.superCall(this, $SymbolTransformer.prototype, "transformBinaryExpression", [tree]);
     },
     transformMemberLookupExpression: function(tree) {
       var operand = this.transformAny(tree.operand);
@@ -19027,7 +19027,7 @@ System.register("traceur@0.0.25/src/codegeneration/TemplateLiteralTransformer", 
   "use strict";
   var __moduleName = "traceur@0.0.25/src/codegeneration/TemplateLiteralTransformer";
   var $__291 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/syntax/trees/ParseTreeType"),
-      BINARY_OPERATOR = $__291.BINARY_OPERATOR,
+      BINARY_EXPRESSION = $__291.BINARY_EXPRESSION,
       COMMA_EXPRESSION = $__291.COMMA_EXPRESSION,
       CONDITIONAL_EXPRESSION = $__291.CONDITIONAL_EXPRESSION,
       TEMPLATE_LITERAL_PORTION = $__291.TEMPLATE_LITERAL_PORTION;
@@ -19050,7 +19050,7 @@ System.register("traceur@0.0.25/src/codegeneration/TemplateLiteralTransformer", 
   var $__291 = $traceurRuntime.getModuleImpl("traceur@0.0.25/src/codegeneration/ParseTreeFactory"),
       createArgumentList = $__291.createArgumentList,
       createArrayLiteralExpression = $__291.createArrayLiteralExpression,
-      createBinaryOperator = $__291.createBinaryOperator,
+      createBinaryExpression = $__291.createBinaryExpression,
       createCallExpression = $__291.createCallExpression,
       createIdentifierExpression = $__291.createIdentifierExpression,
       createMemberExpression = $__291.createMemberExpression,
@@ -19186,7 +19186,7 @@ System.register("traceur@0.0.25/src/codegeneration/TemplateLiteralTransformer", 
     transformTemplateSubstitution: function(tree) {
       var transformedTree = this.transformAny(tree.expression);
       switch (transformedTree.type) {
-        case BINARY_OPERATOR:
+        case BINARY_EXPRESSION:
           switch (transformedTree.operator.type) {
             case STAR:
             case PERCENT:
@@ -19222,7 +19222,7 @@ System.register("traceur@0.0.25/src/codegeneration/TemplateLiteralTransformer", 
             binaryExpression = binaryExpression.right;
         }
         var transformedTree = this.transformAny(tree.elements[i]);
-        binaryExpression = createBinaryOperator(binaryExpression, plusToken, transformedTree);
+        binaryExpression = createBinaryExpression(binaryExpression, plusToken, transformedTree);
       }
       return new ParenExpression(null, binaryExpression);
     }

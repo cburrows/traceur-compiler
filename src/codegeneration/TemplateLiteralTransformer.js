@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {
-  BINARY_OPERATOR,
+  BINARY_EXPRESSION,
   COMMA_EXPRESSION,
   CONDITIONAL_EXPRESSION,
   TEMPLATE_LITERAL_PORTION
@@ -40,7 +40,7 @@ import {
 import {
   createArgumentList,
   createArrayLiteralExpression,
-  createBinaryOperator,
+  createBinaryExpression,
   createCallExpression,
   createIdentifierExpression,
   createMemberExpression,
@@ -235,7 +235,7 @@ export class TemplateLiteralTransformer extends TempVarTransformer {
     var transformedTree = this.transformAny(tree.expression);
     // Wrap in a paren expression if needed.
     switch (transformedTree.type) {
-      case BINARY_OPERATOR:
+      case BINARY_EXPRESSION:
         // Only * / and % have higher priority than +.
         switch (transformedTree.operator.type) {
           case STAR:
@@ -280,7 +280,7 @@ export class TemplateLiteralTransformer extends TempVarTransformer {
           binaryExpression = binaryExpression.right;
       }
       var transformedTree = this.transformAny(tree.elements[i]);
-      binaryExpression = createBinaryOperator(binaryExpression, plusToken,
+      binaryExpression = createBinaryExpression(binaryExpression, plusToken,
                                               transformedTree);
     }
 
